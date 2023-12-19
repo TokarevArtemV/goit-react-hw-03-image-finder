@@ -1,0 +1,22 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+.text {
+  display: block;
+  height: 32px;
+}
+.input {
+  padding: 5px 10px;
+  border: 1px solid black;
+  height: 32px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.button {
+  border: 1px solid rgb(0, 0, 0);
+  height: 32px;
+  width: 100px;
+  border-radius: 16px;
+  cursor: pointer;
+}
