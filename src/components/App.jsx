@@ -4,6 +4,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Modal } from './Modal/Modal';
 import { ToastContainer, toast } from 'react-toastify';
+import { Watch } from 'react-loader-spinner';
 import * as ImageService from './API/Api';
 
 export class App extends Component {
@@ -36,11 +37,14 @@ export class App extends Component {
           );
         }
         this.setState(prevState => ({
+          status: 'loading',
           images: [...prevState.images, ...hits],
           isLoadMore: page < Math.ceil(totalHits / 12),
         }));
       } catch (error) {
         this.setState({ error: error.message });
+      } finally {
+        this.setState({ status: 'idle' });
       }
     }
 
@@ -57,6 +61,7 @@ export class App extends Component {
   loadMoreImages = () => {
     this.setState(prevState => {
       return {
+        status: 'loading',
         page: prevState.page + 1,
       };
     });
@@ -69,13 +74,14 @@ export class App extends Component {
       images: [],
       isLoadMore: false,
       isEmpty: false,
+      status: 'loading',
     });
   };
 
   //============================== App methods Modal
 
   handlerModal = (largeImageURL, tags) => {
-    this.setState({ largeImageURL, tags });
+    this.setState({ largeImageURL, tags, status: 'loading' });
   };
 
   handlerCloseModal = () => {
@@ -83,12 +89,14 @@ export class App extends Component {
       return {
         showModal: !prevState.showModal,
         largeImageURL: '',
+        status: 'idle',
       };
     });
   };
 
   render() {
-    const { images, isLoadMore, showModal, isEmpty, error } = this.state;
+    const { images, isLoadMore, showModal, isEmpty, error, status } =
+      this.state;
 
     return (
       <div className="App">
@@ -110,6 +118,27 @@ export class App extends Component {
         {error && <p className="textEmpty">Sorry. {error} 😭</p>}
         {isEmpty && (
           <p className="textEmpty">Sorry. There are no images... 😭</p>
+        )}
+        {status === 'loading' && (
+          <Watch
+            visible={true}
+            height="80"
+            width="80"
+            radius="48"
+            color="#4fa94d"
+            ariaLabel="watch-loading"
+            wrapperStyle={{
+              backgroundColor: ' #cbcccd',
+              opacity: '0.5',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100vh',
+              width: '100vw',
+              position: 'fixed',
+              zIndex: '99',
+            }}
+            wrapperClass=""
+          />
         )}
         <ToastContainer autoClose={2000} hideProgressBar={true} theme="light" />
       </div>
