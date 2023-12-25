@@ -1,12 +1,15 @@
 import { Component } from 'react';
+import disableScroll from 'disable-scroll';
 
 export class Modal extends Component {
   componentDidMount() {
     window.addEventListener('keydown', this.hendlerCloseModal);
+    disableScroll.on();
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.hendlerCloseModal);
+    disableScroll.off();
   }
 
   hendlerCloseModal = evt => {
